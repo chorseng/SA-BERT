@@ -1,3 +1,4 @@
+#!/bin/bash
 
 CUDA_VISIBLE_DEVICES=3 python -u ../train.py \
   --task_name fine_tuning \
