@@ -3,8 +3,13 @@ import collections
 import tokenization
 import tensorflow as tf
 from tqdm import tqdm
+import json
 
-tf.flags.DEFINE_string("response_file", "./simmc_data/fashion_responses.txt", 
+tf.flags.DEFINE_string("train_response_file", "./simmc_data/fashion_responses.txt", 
+                       "path to response file")
+tf.flags.DEFINE_string("valid_response_file", "./simmc_data/fashion_responses.txt", 
+                       "path to response file")
+tf.flags.DEFINE_string("test_response_file", "./simmc_data/fashion_responses.txt", 
                        "path to response file")
 tf.flags.DEFINE_string("train_file", "./simmc_data/fashion_train.txt", 
 	                   "path to train file")
@@ -35,29 +40,75 @@ def print_configuration_op(FLAGS):
         else:
             print('%s:\t %s' % (name, value))
     print('End of configuration')
-    
-    
+        
     
 def load_responses(fname):
     responses={}
-    with open(fname, 'rt') as f:
-        for line in f:
-            line = line.strip()
-            fields = line.split('\t')
-            if len(fields) != 2:
-                print("WRONG LINE: {}".format(line))
-                r_text = 'unknown'
-            else:
-                r_text = fields[1]
-            responses[fields[0]] = r_text
+    with open(fname, 'r') as f:
+	response_dict = json.load(f)
+        for response_idx, response_text in enumerate(response_dict['system_transcript_pool']:
+            responses[response_idx] = response_text
     return responses
 
-def load_dataset(fname, responses):
+def get_candidates(fname):
+    with open(fname, 'r') as f:
+        json_dict = json.load(f)
+						     
+    return json_dict
+						     
+						     
+def extract_dialog(fname):
+    print("Extacting dialogs from {} ...".format(fname))
+    dialogs = []						    
+    with open(fname, 'r') as f:
+        dial_json = json.load(f)
+    for dialog in dial_json['dialogue_data']:
+        dialog_dict = {}
+	dialog_dict['dialog_idx'] = dialog['dialogue_idx']
+	dialog_dict['dialog'] = []
+	utterances = ""
+	for turn in dialog['dialogue']:
+	    utterances = utterances + turn['transcript']
+	    dialog_dict['dialog'].append(utterances)
+	    utterances = utterances + ' __EOS__ ' + turn['system_transcript'] + ' __EOS__ '
+        dialogs.append(dialog_dict)
+						     
+    return dialogs
+						     
+def load_dataset(dialogs, candidates, responses, suffix):
 
-    processed_fname = "processed_" + fname.split("/")[-1]
+    processed_fname = "processed_" + suffix
     dataset_size = 0
     print("Generating the file of {} ...".format(processed_fname))
-
+    
+    with open(processed_fname, 'w') as fw:						     
+						     
+    	response_idx = 0
+	us_id = 0					    
+    	for dialog in dialogs:
+	    dialog_idx = dialog['dialog_idx']
+	    if dialog_idx != responses['retrieval_candidates'][response_idx]['dialogue_idx']:
+	        print("DIALOGS DON'T MATCH!")
+	    else:
+	        turn_idx = 0
+                for turn_context in dialog['dialog']:
+	    	    context = turn_context
+		
+		    pos_ids = candidates['retrieval_candidates'][response_idx]['retrieval_candidates'][turn_idx]['retrieval_candidates'][0]
+		        r_utter = responses[pos_ids]
+			dataset_size += 1
+			fw.write("\t".join([str(us_id), context, pos_ids, r_utter, 'follow']))
+						   
+		    for neg_ids in candidates['retrieval_candidates'][response_idx]['retrieval_candidates'][turn_idx]['retrieval_candidates'][1:]:
+		        r_utter = responses[neg_ids]
+			dataset_size += 1
+		        fw.write("\t".join([str(us_id), context, neg_ids, r_utter, 'unfollow']))
+						     
+		    us_id += 1			     
+		turn_idx += 1				
+	    response_idx += 1	     
+						     
+  """						     
     with open(processed_fname, 'w') as fw:
         with open(fname, 'rt') as fr:
             for line in fr:
@@ -82,6 +133,7 @@ def load_dataset(fname, responses):
                         dataset_size += 1
                         fw.write("\t".join([str(us_id), context, r_id, r_utter, 'unfollow']))
                         fw.write('\n')
+    """
     
     print("{} dataset_size: {}".format(processed_fname, dataset_size))            
     return processed_fname
@@ -335,9 +387,18 @@ if __name__ == "__main__":
     print_configuration_op(FLAGS)
 
     responses = load_responses(FLAGS.response_file)
-    train_filename = load_dataset(FLAGS.train_file, responses)
-    valid_filename = load_dataset(FLAGS.valid_file, responses)
-    test_filename  = load_dataset(FLAGS.test_file, responses)
+    
+    train_dials = extract_dialog(FLAGS.train_file)
+    valid_dials = extract_dialog(FLAGS.valid_file)
+    test_dials = extract_dialog(FLAGS.test_file)
+						     
+    train_candidates = get_candidates(FLAGS.train_response_file)
+    valid_candidates = get_candidates(FLAGS.valid_response_file)
+    test_candidates = get_candidates(FLAGS.test_response_file)
+						     
+    train_filename = load_dataset(train_dials, train_candidates, responses, 'train')
+    valid_filename = load_dataset(valid_dials, valid_candidates, responses, 'valid')
+    test_filename  = load_dataset(test_dials, test_candidates, responses, 'test')
 
     filenames = [train_filename, valid_filename, test_filename]
     filetypes = ["train", "valid", "test"]
