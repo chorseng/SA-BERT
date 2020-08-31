@@ -5,13 +5,13 @@ import tensorflow as tf
 from tqdm import tqdm
 
 
-tf.flags.DEFINE_string("response_file", "./Ubuntu_Corpus_V1/responses.txt", 
+tf.flags.DEFINE_string("response_file", "./Ubuntu_Corpus_V1/train_responses.json", 
                        "path to response file")
-tf.flags.DEFINE_string("train_file", "./Ubuntu_Corpus_V1/train.txt", 
+tf.flags.DEFINE_string("train_file", "./Ubuntu_Corpus_V1/train.json", 
 	                   "path to train file")
-tf.flags.DEFINE_string("valid_file", "./Ubuntu_Corpus_V1/valid.txt", 
+tf.flags.DEFINE_string("valid_file", "./Ubuntu_Corpus_V1/valid.json", 
 	                   "path to valid file")
-tf.flags.DEFINE_string("test_file", "./Ubuntu_Corpus_V1/test.txt", 
+tf.flags.DEFINE_string("test_file", "./Ubuntu_Corpus_V1/test.json", 
                        "path to test file")
 
 tf.flags.DEFINE_string("vocab_file", "../../uncased_L-12_H-768_A-12/vocab.txt", 
