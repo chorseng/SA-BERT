@@ -1,5 +1,3 @@
-#!/bin/bash
-
 CUDA_VISIBLE_DEVICES=3 python -u ../train.py \
   --task_name fine_tuning \
   --train_dir ../data/Ubuntu_V1_Xu/processed_train.tfrecord \
