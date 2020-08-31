@@ -32,33 +32,33 @@ flags = tf.flags
 FLAGS = flags.FLAGS
 
 ## Required parameters
-flags.DEFINE_string("train_dir", 'train.tfrecord',
+flags.DEFINE_string("train_dir", '../data/Ubuntu_V1_Xu/processed_train.tfrecord',
                     "The input train data dir. Should contain the .tsv files (or other data files) for the task.")
 
-flags.DEFINE_string("valid_dir", 'valid.tfrecord',
+flags.DEFINE_string("valid_dir", '../data/Ubuntu_V1_Xu/processed_valid.tfrecord',
                     "The input valid data dir. Should contain the .tsv files (or other data files) for the task.")
 
-flags.DEFINE_string("output_dir", 'output',
+flags.DEFINE_string("output_dir", '../output/Ubuntu_V1_Xu',
                     "The output directory where the model checkpoints will be written.")
 
 flags.DEFINE_string("task_name", 'ResponseSelection', 
                     "The name of the task to train.")
 
-flags.DEFINE_string("bert_config_file", 'uncased_L-12_H-768_A-12/bert_config.json',
+flags.DEFINE_string("bert_config_file", '../uncased_L-12_H-768_A-12/bert_config.json',
                     "The config json file corresponding to the pre-trained BERT model. "
                     "This specifies the model architecture.")
 
-flags.DEFINE_string("vocab_file", 'uncased_L-12_H-768_A-12/vocab.txt',
+flags.DEFINE_string("vocab_file", '../uncased_L-12_H-768_A-12/vocab.txt',
                     "The vocabulary file that the BERT model was trained on.")
 
-flags.DEFINE_string("init_checkpoint", 'uncased_L-12_H-768_A-12/bert_model.ckpt',
+flags.DEFINE_string("init_checkpoint", '../uncased_L-12_H-768_A-12/bert_model.ckpt',
                     "Initial checkpoint (usually from a pre-trained BERT model).")
 
 flags.DEFINE_bool("do_lower_case", True,
                   "Whether to lower case the input text. Should be True for uncased "
                   "models and False for cased models.")
 
-flags.DEFINE_integer("max_seq_length", 320,
+flags.DEFINE_integer("max_seq_length", 512,
                      "The maximum total input sequence length after WordPiece tokenization. "
                      "Sequences longer than this will be truncated, and sequences shorter "
                      "than this will be padded.")
@@ -76,7 +76,7 @@ flags.DEFINE_float("warmup_proportion", 0.1,
                    "Proportion of training to perform linear learning rate warmup for. "
                    "E.g., 0.1 = 10% of training.")
 
-flags.DEFINE_integer("train_batch_size", 12, 
+flags.DEFINE_integer("train_batch_size", 25, 
                      "Total batch size for training.")
 
 flags.DEFINE_integer("eval_batch_size", 12, 
@@ -88,7 +88,7 @@ flags.DEFINE_integer("predict_batch_size", 8,
 flags.DEFINE_float("learning_rate", 2e-5, 
                    "The initial learning rate for Adam.")
 
-flags.DEFINE_integer("num_train_epochs", 5, 
+flags.DEFINE_integer("num_train_epochs", 10, 
                      "Total number of training epochs to perform.")
 
 
