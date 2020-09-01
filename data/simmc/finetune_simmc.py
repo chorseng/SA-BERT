@@ -97,13 +97,15 @@ def load_dataset(dialogs, candidates, responses, suffix):
 		    r_utter = responses[pos_ids]
 		    dataset_size += 1
 		    fw.write("\t".join([str(us_id), context.encode('ascii', 'ignore').decode('ascii'), str(pos_ids), r_utter.encode('ascii', 'ignore').decode('ascii'), "follow"]))
-						   
+		    fw.write('\n')
+			
 		    for neg_ids in candidates['retrieval_candidates'][response_idx]['retrieval_candidates'][turn_idx]['retrieval_candidates'][1:]:
 		        r_utter = responses[neg_ids]
 			dataset_size += 1
 			#print(str(us_id) + " " + context + " " + str(neg_ids) + " " + r_utter + " " + "unfollow")
 		        fw.write("\t".join([str(us_id), context.encode('ascii', 'ignore').decode('ascii'), str(neg_ids), r_utter.encode('ascii', 'ignore').decode('ascii'), "unfollow"]))
-						     
+			fw.write('\n')
+			
 		    us_id += 1			     
 		turn_idx += 1				
 	    response_idx += 1	     
@@ -163,18 +165,17 @@ def create_examples(lines, set_type):
     """Creates examples for the training and dev sets."""
     examples = []
     for (i, line) in enumerate(lines):
-	print(i)
         guid = "%s-%s" % (set_type, str(i)) # e.g. "train-1"
         ques_ids = line[0]
-	print(ques_ids)
+	#print(ques_ids)
         text_a = tokenization.convert_to_unicode(line[1])
-	print(text_a)
+	#print(text_a)
         ans_ids = line[2]
-	print(ans_ids)
+	#print(ans_ids)
         text_b = tokenization.convert_to_unicode(line[3])
-	print(text_b)
+	#print(text_b)
         label = tokenization.convert_to_unicode(line[-1])
-	print(label, line[-1])
+	#print(label, line[-1])
         examples.append(InputExample(guid=guid, ques_ids=ques_ids, text_a=text_a, ans_ids=ans_ids, text_b=text_b, label=label))
     return examples
 
