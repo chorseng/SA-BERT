@@ -101,6 +101,7 @@ def load_dataset(dialogs, candidates, responses, suffix):
 		    for neg_ids in candidates['retrieval_candidates'][response_idx]['retrieval_candidates'][turn_idx]['retrieval_candidates'][1:]:
 		        r_utter = responses[neg_ids]
 			dataset_size += 1
+			print(str(us_id) + " " + context + " " + str(neg_ids) + " " + r_utter + " " + "unfollow")
 		        fw.write("\t".join([str(us_id), context, str(neg_ids), r_utter, 'unfollow']))
 						     
 		    us_id += 1			     
