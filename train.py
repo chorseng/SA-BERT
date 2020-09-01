@@ -38,7 +38,7 @@ flags.DEFINE_string("train_dir", 'train.tfrecord',
 flags.DEFINE_string("valid_dir", 'valid.tfrecord',
                     "The input valid data dir. Should contain the .tsv files (or other data files) for the task.")
 
-flags.DEFINE_string("output_dir", 'output',
+flags.DEFINE_string("output_dir", 'output/Ubuntu_V1_Xu',
                     "The output directory where the model checkpoints will be written.")
 
 flags.DEFINE_string("task_name", 'ResponseSelection', 
