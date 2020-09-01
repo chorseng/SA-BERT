@@ -86,7 +86,7 @@ def load_dataset(dialogs, candidates, responses, suffix):
 	us_id = 0					    
     	for dialog in dialogs:
 	    dialog_idx = dialog['dialog_idx']
-	    if dialog_idx != responses['retrieval_candidates'][response_idx]['dialogue_idx']:
+	    if dialog_idx != candidates['retrieval_candidates'][response_idx]['dialogue_idx']:
 	        print("DIALOGS DON'T MATCH!")
 	    else:
 	        turn_idx = 0
@@ -358,18 +358,25 @@ if __name__ == "__main__":
 
     FLAGS = tf.flags.FLAGS
     print_configuration_op(FLAGS)
-
+    
+    print("Processing candidate responses ...")
     train_responses = load_responses(FLAGS.train_response_file)
     valid_responses = load_responses(FLAGS.valid_response_file)
     test_responses = load_responses(FLAGS.test_response_file)
+    print("Processing candidate responses done!")
     
+    print("Extracting dialogs ...")
     train_dials = extract_dialog(FLAGS.train_file)
     valid_dials = extract_dialog(FLAGS.valid_file)
     test_dials = extract_dialog(FLAGS.test_file)
-						     
+    print("Dialog extraction done ...")
+	
+	
+    print("Extracting candidates ... ")					     
     train_candidates = get_candidates(FLAGS.train_response_file)
     valid_candidates = get_candidates(FLAGS.valid_response_file)
     test_candidates = get_candidates(FLAGS.test_response_file)
+    print("Extracting candidates done!")
 						     
     train_filename = load_dataset(train_dials, train_candidates, train_responses, 'train')
     valid_filename = load_dataset(valid_dials, valid_candidates, valid_responses, 'valid')
