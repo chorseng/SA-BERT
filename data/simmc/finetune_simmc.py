@@ -46,7 +46,7 @@ def load_responses(fname):
     responses={}
     with open(fname, 'r') as f:
 	response_dict = json.load(f)
-        for response_idx, response_text in enumerate(response_dict['system_transcript_pool']:
+        for response_idx, response_text in enumerate(response_dict['system_transcript_pool']):
             responses[response_idx] = response_text
     return responses
 
