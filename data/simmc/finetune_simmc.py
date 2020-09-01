@@ -394,7 +394,7 @@ if __name__ == "__main__":
     tokenizer = tokenization.FullTokenizer(vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case)
 
     for (filename, filetype) in files:
-	print("Now processing + filename + " ...")
+	print("Now processing " + filename + " ...")
         examples = create_examples(read_processed_file(filename), filetype)
         features = convert_examples_to_features(examples, label_list, FLAGS.max_seq_length, tokenizer)
         new_filename = filename[:-4] + ".tfrecord"
