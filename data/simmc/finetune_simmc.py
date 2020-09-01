@@ -17,7 +17,6 @@ tf.flags.DEFINE_string("valid_file", "./fashion_dev_dials.json",
 	                   "path to valid file")
 tf.flags.DEFINE_string("test_file", "./fashion_devtest_dials.json", 
                        "path to test file")
-
 tf.flags.DEFINE_string("vocab_file", "../../uncased_L-12_H-768_A-12/vocab.txt", 
                        "path to vocab file")
 tf.flags.DEFINE_integer("max_seq_length", 512, 
@@ -360,7 +359,9 @@ if __name__ == "__main__":
     FLAGS = tf.flags.FLAGS
     print_configuration_op(FLAGS)
 
-    responses = load_responses(FLAGS.response_file)
+    train_responses = load_responses(FLAGS.train_response_file)
+    valid_responses = load_responses(FLAGS.valid_response_file)
+    test_responses = load_responses(FLAGS.test_response_file)
     
     train_dials = extract_dialog(FLAGS.train_file)
     valid_dials = extract_dialog(FLAGS.valid_file)
@@ -370,9 +371,9 @@ if __name__ == "__main__":
     valid_candidates = get_candidates(FLAGS.valid_response_file)
     test_candidates = get_candidates(FLAGS.test_response_file)
 						     
-    train_filename = load_dataset(train_dials, train_candidates, responses, 'train')
-    valid_filename = load_dataset(valid_dials, valid_candidates, responses, 'valid')
-    test_filename  = load_dataset(test_dials, test_candidates, responses, 'test')
+    train_filename = load_dataset(train_dials, train_candidates, train_responses, 'train')
+    valid_filename = load_dataset(valid_dials, valid_candidates, valid_responses, 'valid')
+    test_filename  = load_dataset(test_dials, test_candidates, test_responses, 'test')
 
     filenames = [train_filename, valid_filename, test_filename]
     filetypes = ["train", "valid", "test"]
