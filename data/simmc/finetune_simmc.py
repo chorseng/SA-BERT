@@ -95,9 +95,9 @@ def load_dataset(dialogs, candidates, responses, suffix):
 	    	    context = turn_context
 		
 		    pos_ids = candidates['retrieval_candidates'][response_idx]['retrieval_candidates'][turn_idx]['retrieval_candidates'][0]
-		        r_utter = responses[pos_ids]
-			dataset_size += 1
-			fw.write("\t".join([str(us_id), context, pos_ids, r_utter, 'follow']))
+		    r_utter = responses[pos_ids]
+		    dataset_size += 1
+		    fw.write("\t".join([str(us_id), context, pos_ids, r_utter, 'follow']))
 						   
 		    for neg_ids in candidates['retrieval_candidates'][response_idx]['retrieval_candidates'][turn_idx]['retrieval_candidates'][1:]:
 		        r_utter = responses[neg_ids]
