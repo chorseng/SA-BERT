@@ -165,10 +165,15 @@ def create_examples(lines, set_type):
     for (i, line) in enumerate(lines):
         guid = "%s-%s" % (set_type, str(i)) # e.g. "train-1"
         ques_ids = line[0]
+	print(ques_ids)
         text_a = tokenization.convert_to_unicode(line[1])
+	print(text_a)
         ans_ids = line[2]
+	print(ans_ids)
         text_b = tokenization.convert_to_unicode(line[3])
+	print(text_b)
         label = tokenization.convert_to_unicode(line[-1])
+	print(label, line[-1])
         examples.append(InputExample(guid=guid, ques_ids=ques_ids, text_a=text_a, ans_ids=ans_ids, text_b=text_b, label=label))
     return examples
 
