@@ -102,7 +102,7 @@ def load_dataset(dialogs, candidates, responses, suffix):
 		        r_utter = responses[neg_ids]
 			dataset_size += 1
 			print(str(us_id) + " " + context + " " + str(neg_ids) + " " + r_utter + " " + "unfollow")
-		        fw.write("\t".join([str(us_id), context, str(neg_ids), r_utter, 'unfollow']))
+		        fw.write("\t".join([str(us_id), context, str(neg_ids), r_utter.encode('utf-8'), 'unfollow']))
 						     
 		    us_id += 1			     
 		turn_idx += 1				
