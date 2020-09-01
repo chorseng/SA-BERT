@@ -108,30 +108,6 @@ def load_dataset(dialogs, candidates, responses, suffix):
 		turn_idx += 1				
 	    response_idx += 1	     
 						     
-  """						     
-    with open(processed_fname, 'w') as fw:
-        with open(fname, 'rt') as fr:
-            for line in fr:
-                line = line.strip()
-                fields = line.split('\t')
-                
-                us_id = fields[0]
-                context = fields[1]
-                if fields[2] != "NA":
-                    pos_ids = [id for id in fields[2].split('|')]
-                    for r_id in pos_ids:
-                        r_utter = responses[r_id]
-                        dataset_size += 1
-                        fw.write("\t".join([str(us_id), context, r_id, r_utter, 'follow']))
-                        fw.write('\n')
-                if fields[3] != "NA":
-                    neg_ids = [id for id in fields[3].split('|')]
-                    for r_id in neg_ids:
-                        r_utter = responses[r_id]
-                        dataset_size += 1
-                        fw.write("\t".join([str(us_id), context, r_id, r_utter, 'unfollow']))
-                        fw.write('\n')
-    """
     
     print("{} dataset_size: {}".format(processed_fname, dataset_size))            
     return processed_fname
