@@ -380,7 +380,7 @@ if __name__ == "__main__":
     test_candidates = get_candidates(FLAGS.test_response_file)
     print("Extracting candidates done!")
     
-    print("Loading datasets ..."
+    print("Loading datasets ...")
     train_filename = load_dataset(train_dials, train_candidates, train_responses, 'train')
     valid_filename = load_dataset(valid_dials, valid_candidates, valid_responses, 'valid')
     test_filename  = load_dataset(test_dials, test_candidates, test_responses, 'test')
