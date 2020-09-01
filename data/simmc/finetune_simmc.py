@@ -96,13 +96,13 @@ def load_dataset(dialogs, candidates, responses, suffix):
 		    pos_ids = candidates['retrieval_candidates'][response_idx]['retrieval_candidates'][turn_idx]['retrieval_candidates'][0]
 		    r_utter = responses[pos_ids]
 		    dataset_size += 1
-		    fw.write("\t".join([str(us_id), context.encode('ascii', 'ignore').decode('ascii'), str(pos_ids), r_utter.encode('ascii', 'ignore').decode('ascii'), 'follow']))
+		    fw.write("\t".join([str(us_id), context.encode('ascii', 'ignore').decode('ascii'), str(pos_ids), r_utter.encode('ascii', 'ignore').decode('ascii'), "follow"]))
 						   
 		    for neg_ids in candidates['retrieval_candidates'][response_idx]['retrieval_candidates'][turn_idx]['retrieval_candidates'][1:]:
 		        r_utter = responses[neg_ids]
 			dataset_size += 1
 			#print(str(us_id) + " " + context + " " + str(neg_ids) + " " + r_utter + " " + "unfollow")
-		        fw.write("\t".join([str(us_id), context.encode('ascii', 'ignore').decode('ascii'), str(neg_ids), r_utter.encode('ascii', 'ignore').decode('ascii'), 'unfollow']))
+		        fw.write("\t".join([str(us_id), context.encode('ascii', 'ignore').decode('ascii'), str(neg_ids), r_utter.encode('ascii', 'ignore').decode('ascii'), "unfollow"]))
 						     
 		    us_id += 1			     
 		turn_idx += 1				
@@ -144,6 +144,7 @@ class InputFeatures(object):
         self.label_id = label_id
 
 def read_processed_file(input_file):
+    """Counts number of lines in input file, concatenates all the information in each line into a list, and appends to another list (lines). """
     lines = []
     num_lines = sum(1 for line in open(input_file, 'r'))
     with open(input_file, 'r') as f:
@@ -162,7 +163,7 @@ def create_examples(lines, set_type):
     """Creates examples for the training and dev sets."""
     examples = []
     for (i, line) in enumerate(lines):
-        guid = "%s-%s" % (set_type, str(i))
+        guid = "%s-%s" % (set_type, str(i)) # e.g. "train-1"
         ques_ids = line[0]
         text_a = tokenization.convert_to_unicode(line[1])
         ans_ids = line[2]
@@ -192,7 +193,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
     """Loads a data file into a list of `InputBatch`s."""
 
     label_map = {}  # label
-    for (i, label) in enumerate(label_list):  # ['0', '1']
+    for (i, label) in enumerate(label_list):  # ['0', '1'] so "unfollow" = 0 and "follow" = 1
         label_map[label] = i
 
     features = []  # feature
@@ -206,12 +207,12 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
         text_a_switch = []
         for text_a_utter_idx, text_a_utter in enumerate(text_a_utters):
             if text_a_utter_idx%2 == 0:
-                text_a_switch_flag = 0
+                text_a_switch_flag = 0 # user utterance is tagged 0
             else:
-                text_a_switch_flag = 1
-            text_a_utter_token = tokenizer.tokenize(text_a_utter + " __EOS__")
-            tokens_a.extend(text_a_utter_token)
-            text_a_switch.extend([text_a_switch_flag]*len(text_a_utter_token))
+                text_a_switch_flag = 1 # systerm utterance is tagged 1
+            text_a_utter_token = tokenizer.tokenize(text_a_utter + " __EOS__") #tokenizes the entire sentence utterance, I think it will split into individual words
+            tokens_a.extend(text_a_utter_token)  # adds to tokens_a
+            text_a_switch.extend([text_a_switch_flag]*len(text_a_utter_token)) 
         assert len(tokens_a) == len(text_a_switch)
 
         tokens_b = None
@@ -378,10 +379,12 @@ if __name__ == "__main__":
     valid_candidates = get_candidates(FLAGS.valid_response_file)
     test_candidates = get_candidates(FLAGS.test_response_file)
     print("Extracting candidates done!")
-						     
+    
+    print("Loading datasets ..."
     train_filename = load_dataset(train_dials, train_candidates, train_responses, 'train')
     valid_filename = load_dataset(valid_dials, valid_candidates, valid_responses, 'valid')
     test_filename  = load_dataset(test_dials, test_candidates, test_responses, 'test')
+    print("Datasets loaded!")
 
     filenames = [train_filename, valid_filename, test_filename]
     filetypes = ["train", "valid", "test"]
@@ -391,6 +394,7 @@ if __name__ == "__main__":
     tokenizer = tokenization.FullTokenizer(vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case)
 
     for (filename, filetype) in files:
+	print("Now processing + filename + " ...")
         examples = create_examples(read_processed_file(filename), filetype)
         features = convert_examples_to_features(examples, label_list, FLAGS.max_seq_length, tokenizer)
         new_filename = filename[:-4] + ".tfrecord"
