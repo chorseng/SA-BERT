@@ -295,8 +295,8 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
         assert len(segment_ids) == max_seq_length
         assert len(switch_ids) == max_seq_length
 	
-	print(example.ques_ids)
-	print(example.label)
+	#print(example.ques_ids)
+	#print(example.label)
         label_id = label_map[example.label]
 
         if ex_index%2000 == 0:
