@@ -108,7 +108,7 @@ def load_dataset(dialogs, candidates, responses, suffix):
 		turn_idx += 1				
 	    response_idx += 1	     
 						     
-    
+    print("Num_lines = " + str(len(fw.readlines())))
     print("{} dataset_size: {}".format(processed_fname, dataset_size))            
     return processed_fname
 
@@ -163,6 +163,7 @@ def create_examples(lines, set_type):
     """Creates examples for the training and dev sets."""
     examples = []
     for (i, line) in enumerate(lines):
+	print(i)
         guid = "%s-%s" % (set_type, str(i)) # e.g. "train-1"
         ques_ids = line[0]
 	print(ques_ids)
