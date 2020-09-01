@@ -108,7 +108,7 @@ def load_dataset(dialogs, candidates, responses, suffix):
 		turn_idx += 1				
 	    response_idx += 1	     
 						     
-    print("Num_lines = " + str(len(fw.readlines())))
+    print("Num_lines = " + str(len(open(processed_fname).readlines())))
     print("{} dataset_size: {}".format(processed_fname, dataset_size))            
     return processed_fname
 
