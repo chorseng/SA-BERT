@@ -410,7 +410,8 @@ if __name__ == "__main__":
     for (filename, filetype) in files:
         examples = create_examples(read_processed_file(filename), filetype)
         features = convert_examples_to_features(examples, label_list, FLAGS.max_seq_length, tokenizer)
-        new_filename = filename[:-4] + ".tfrecord"
+        #new_filename = filename[:-4] + ".tfrecord"
+	new_filename = filename + ".tfrecord"
         write_instance_to_example_files(features, [new_filename])
         print('Convert {} to {} done'.format(filename, new_filename))
 
